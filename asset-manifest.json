@@ -1,18 +1,18 @@
 {
   "main.css": "/swarm_construction_dashboard/static/css/main.b5a60156.chunk.css",
-  "main.js": "/swarm_construction_dashboard/static/js/main.f87c3a6f.chunk.js",
-  "main.js.map": "/swarm_construction_dashboard/static/js/main.f87c3a6f.chunk.js.map",
+  "main.js": "/swarm_construction_dashboard/static/js/main.1d9fc130.chunk.js",
+  "main.js.map": "/swarm_construction_dashboard/static/js/main.1d9fc130.chunk.js.map",
   "static/css/1.d6b3eb6a.chunk.css": "/swarm_construction_dashboard/static/css/1.d6b3eb6a.chunk.css",
   "static/js/1.48eeb5d6.chunk.js": "/swarm_construction_dashboard/static/js/1.48eeb5d6.chunk.js",
   "static/js/1.48eeb5d6.chunk.js.map": "/swarm_construction_dashboard/static/js/1.48eeb5d6.chunk.js.map",
   "runtime~main.js": "/swarm_construction_dashboard/static/js/runtime~main.475db3b5.js",
   "runtime~main.js.map": "/swarm_construction_dashboard/static/js/runtime~main.475db3b5.js.map",
   "static/media/user-img-placeholder.jpeg": "/swarm_construction_dashboard/static/media/user-img-placeholder.be2ed151.jpeg",
-  "static/media/style.css": "/swarm_construction_dashboard/static/media/CircularStd-Bold.6baed2bf.otf",
+  "static/media/style.css": "/swarm_construction_dashboard/static/media/CircularStd-Book.6365c40a.otf",
   "static/media/all.css": "/swarm_construction_dashboard/static/media/fa-solid-900.0724bb8b.svg",
-  "static/css/main.b5a60156.chunk.css.map": "/swarm_construction_dashboard/static/css/main.b5a60156.chunk.css.map",
   "static/css/1.d6b3eb6a.chunk.css.map": "/swarm_construction_dashboard/static/css/1.d6b3eb6a.chunk.css.map",
+  "static/css/main.b5a60156.chunk.css.map": "/swarm_construction_dashboard/static/css/main.b5a60156.chunk.css.map",
   "index.html": "/swarm_construction_dashboard/index.html",
-  "precache-manifest.ab364943ea13875c799ea53d3ba0e0a0.js": "/swarm_construction_dashboard/precache-manifest.ab364943ea13875c799ea53d3ba0e0a0.js",
+  "precache-manifest.054021cc5ba93aecf519d26a87ab61db.js": "/swarm_construction_dashboard/precache-manifest.054021cc5ba93aecf519d26a87ab61db.js",
   "service-worker.js": "/swarm_construction_dashboard/service-worker.js"
 }

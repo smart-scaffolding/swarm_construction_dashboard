@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/swarm_construction_dashboard/precache-manifest.ab364943ea13875c799ea53d3ba0e0a0.js"
+  "/swarm_construction_dashboard/precache-manifest.054021cc5ba93aecf519d26a87ab61db.js"
 );
 
 workbox.clientsClaim();
