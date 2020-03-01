@@ -1,11 +1,11 @@
 self.__precacheManifest = [
   {
-    "revision": "43af7570436c60d0ffb4",
+    "revision": "f87c3a6ff06545b67d28",
     "url": "/swarm_construction_dashboard/static/css/main.b5a60156.chunk.css"
   },
   {
-    "revision": "43af7570436c60d0ffb4",
-    "url": "/swarm_construction_dashboard/static/js/main.43af7570.chunk.js"
+    "revision": "f87c3a6ff06545b67d28",
+    "url": "/swarm_construction_dashboard/static/js/main.f87c3a6f.chunk.js"
   },
   {
     "revision": "48eeb5d67d05172ac4cb",
@@ -36,6 +36,10 @@ self.__precacheManifest = [
     "url": "/swarm_construction_dashboard/static/media/CircularStd-Bold.6baed2bf.otf"
   },
   {
+    "revision": "b564da88bbf0c4aa446fa19653713cd1",
+    "url": "/swarm_construction_dashboard/static/media/fa-brands-400.b564da88.woff"
+  },
+  {
     "revision": "067595ad77ecc0db9c81c8905a7eef32",
     "url": "/swarm_construction_dashboard/static/media/fa-brands-400.067595ad.woff2"
   },
@@ -44,44 +48,40 @@ self.__precacheManifest = [
     "url": "/swarm_construction_dashboard/static/media/fa-brands-400.57dcda6f.eot"
   },
   {
-    "revision": "b564da88bbf0c4aa446fa19653713cd1",
-    "url": "/swarm_construction_dashboard/static/media/fa-brands-400.b564da88.woff"
+    "revision": "9ec698d1a597bff5df337094b71ddaaf",
+    "url": "/swarm_construction_dashboard/static/media/fa-brands-400.9ec698d1.ttf"
   },
   {
     "revision": "3351f435b3c9037fd88aeb04dc1e43bc",
     "url": "/swarm_construction_dashboard/static/media/fa-regular-400.3351f435.eot"
   },
   {
-    "revision": "9ec698d1a597bff5df337094b71ddaaf",
-    "url": "/swarm_construction_dashboard/static/media/fa-brands-400.9ec698d1.ttf"
-  },
-  {
     "revision": "4165c2688309cbfb1b877caf8f75afb5",
     "url": "/swarm_construction_dashboard/static/media/fa-regular-400.4165c268.woff2"
-  },
-  {
-    "revision": "a0e3ac82940c1998c5977fd4bc1f5ef6",
-    "url": "/swarm_construction_dashboard/static/media/fa-regular-400.a0e3ac82.ttf"
   },
   {
     "revision": "73cf49a2232c06c920b7a34e36bfb58c",
     "url": "/swarm_construction_dashboard/static/media/fa-regular-400.73cf49a2.woff"
   },
   {
-    "revision": "89e02bae13c9131c7468b1e729339ac1",
-    "url": "/swarm_construction_dashboard/static/media/fa-solid-900.89e02bae.eot"
-  },
-  {
-    "revision": "cdfec5cf5e9840889790bcf2c4042583",
-    "url": "/swarm_construction_dashboard/static/media/fa-solid-900.cdfec5cf.woff"
+    "revision": "a0e3ac82940c1998c5977fd4bc1f5ef6",
+    "url": "/swarm_construction_dashboard/static/media/fa-regular-400.a0e3ac82.ttf"
   },
   {
     "revision": "5d0861781aeef6c82fda3a3076954a1b",
     "url": "/swarm_construction_dashboard/static/media/fa-regular-400.5d086178.svg"
   },
   {
+    "revision": "89e02bae13c9131c7468b1e729339ac1",
+    "url": "/swarm_construction_dashboard/static/media/fa-solid-900.89e02bae.eot"
+  },
+  {
     "revision": "55eb2a60e8181f0e68b558c991973bf0",
     "url": "/swarm_construction_dashboard/static/media/fa-solid-900.55eb2a60.woff2"
+  },
+  {
+    "revision": "cdfec5cf5e9840889790bcf2c4042583",
+    "url": "/swarm_construction_dashboard/static/media/fa-solid-900.cdfec5cf.woff"
   },
   {
     "revision": "75f38a159982b6bd1704891332d95fa7",
@@ -96,7 +96,7 @@ self.__precacheManifest = [
     "url": "/swarm_construction_dashboard/static/media/fa-solid-900.0724bb8b.svg"
   },
   {
-    "revision": "e4ee984f1d2d5cf22712eee41ccaa4c2",
+    "revision": "08989d45186fd14d93d2f860773c00bc",
     "url": "/swarm_construction_dashboard/index.html"
   }
 ];

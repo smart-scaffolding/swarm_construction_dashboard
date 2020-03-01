@@ -1,7 +1,7 @@
 {
   "main.css": "/swarm_construction_dashboard/static/css/main.b5a60156.chunk.css",
-  "main.js": "/swarm_construction_dashboard/static/js/main.43af7570.chunk.js",
-  "main.js.map": "/swarm_construction_dashboard/static/js/main.43af7570.chunk.js.map",
+  "main.js": "/swarm_construction_dashboard/static/js/main.f87c3a6f.chunk.js",
+  "main.js.map": "/swarm_construction_dashboard/static/js/main.f87c3a6f.chunk.js.map",
   "static/css/1.d6b3eb6a.chunk.css": "/swarm_construction_dashboard/static/css/1.d6b3eb6a.chunk.css",
   "static/js/1.48eeb5d6.chunk.js": "/swarm_construction_dashboard/static/js/1.48eeb5d6.chunk.js",
   "static/js/1.48eeb5d6.chunk.js.map": "/swarm_construction_dashboard/static/js/1.48eeb5d6.chunk.js.map",
@@ -13,6 +13,6 @@
   "static/css/main.b5a60156.chunk.css.map": "/swarm_construction_dashboard/static/css/main.b5a60156.chunk.css.map",
   "static/css/1.d6b3eb6a.chunk.css.map": "/swarm_construction_dashboard/static/css/1.d6b3eb6a.chunk.css.map",
   "index.html": "/swarm_construction_dashboard/index.html",
-  "precache-manifest.b7d7395252555ba40cbc7b4920a9c0c7.js": "/swarm_construction_dashboard/precache-manifest.b7d7395252555ba40cbc7b4920a9c0c7.js",
+  "precache-manifest.ab364943ea13875c799ea53d3ba0e0a0.js": "/swarm_construction_dashboard/precache-manifest.ab364943ea13875c799ea53d3ba0e0a0.js",
   "service-worker.js": "/swarm_construction_dashboard/service-worker.js"
 }
