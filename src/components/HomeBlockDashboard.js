@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+
 import { Container, Nav } from "./styled-components";
 
 // fusioncharts
@@ -19,31 +20,20 @@ import Robot from "./Robot";
 import Gauge from "./Gauge";
 import UserImg from "../assets/images/user-img-placeholder.jpeg";
 import Console from "./Console";
-import RobotDashboard from "./RobotDashboard";
-import HomeBlockDashboard from "./HomeBlockDashboard";
-import Pusher from "pusher-js";
-
+import BlockSimulation from "./BlockSimulation";
 ReactFC.fcRoot(FusionCharts, Charts, Maps, USARegion, Widgets);
 
 Charts(FusionCharts);
 
 const url = `https://sheets.googleapis.com/v4/spreadsheets/${config.spreadsheetId}/values:batchGet?ranges=Sheet1&majorDimension=ROWS&key=${config.apiKey}`;
 
-Pusher.logToConsole = true;
-
-var pusher = new Pusher("b19a4591cdd9ad1d70f7", {
-  cluster: "us2",
-  forceTLS: true
-});
-
-var channel = pusher.subscribe("robot");
-class App extends Component {
+export default class HomeBlockDashboard extends Component {
   constructor() {
     super();
     this.state = {
       items: [],
       dropdownOptions: [],
-      selectedValue: "Select robot here",
+      selectedValue: null,
       amRevenue: null,
       ebRevenue: null,
       etRevenue: null,
@@ -52,9 +42,7 @@ class App extends Component {
       purchaseRate: " ",
       checkoutRate: " ",
       abandonedRate: " ",
-      ordersTrendStore: [],
-
-      display: "robot"
+      ordersTrendStore: []
     };
   }
 
@@ -90,7 +78,7 @@ class App extends Component {
     let orderesTrendne = 0;
     let orderesTrendse = 0;
 
-    // let selectedValue = null;
+    let selectedValue = null;
 
     for (let i = 0; i < arrLen; i++) {
       if (arg === arr[i]["month"]) {
@@ -152,7 +140,7 @@ class App extends Component {
       }
     );
 
-    // selectedValue = "0";
+    selectedValue = "0";
 
     // setting state
     this.setState({
@@ -165,8 +153,8 @@ class App extends Component {
       checkoutRate: checkoutRate,
       abandonedRate: abandonedRate,
       ordersTrendStore: ordersTrendStore,
-      ordersTrendRegion: ordersTrendRegion
-      // selectedValue: selectedValue
+      ordersTrendRegion: ordersTrendRegion,
+      selectedValue: selectedValue
     });
   };
 
@@ -176,25 +164,6 @@ class App extends Component {
   };
 
   componentDidMount() {
-    channel.bind("state", data => {
-      // alert(JSON.stringify(data));
-      if (data["id"] in this.state.dropdownOptions) {
-        // if (this.state.selectedValue === data["id"]) {
-        //   this.setState({
-        //     connection_status: "CONNECTED",
-        //     position: data["position"],
-        //     id: data["id"],
-        //     angles: data["angles"]
-        //   });
-        // }
-      } else {
-        let new_dropdown_options = this.state.dropdownOptions;
-        // console.log(this.state.dropdownOptions);
-        // console.log(data["id"]);
-        new_dropdown_options.push(data["id"]);
-        this.setState({ dropdownOptions: [...new Set(new_dropdown_options)] });
-      }
-    });
     fetch(url)
       .then(response => response.json())
       .then(data => {
@@ -210,85 +179,128 @@ class App extends Component {
         }
 
         // dropdown options
-        // let dropdownOptions = [];
+        let dropdownOptions = [];
 
-        // for (let i = 0; i < rows.length; i++) {
-        //   dropdownOptions.push(i);
-        // }
+        for (let i = 0; i < rows.length; i++) {
+          dropdownOptions.push(i);
+        }
 
-        // dropdownOptions = Array.from(new Set(dropdownOptions));
+        dropdownOptions = Array.from(new Set(dropdownOptions));
 
         this.setState(
           {
-            items: rows
-            // dropdownOptions: dropdownOptions,
-            // selectedValue: "0"
+            items: rows,
+            dropdownOptions: dropdownOptions,
+            selectedValue: "0"
           },
           () => this.getData("Jan 2019")
         );
       });
   }
 
-  showDashboard = () => {
-    if (this.state.display === "robot") {
-      return <RobotDashboard robot_id={this.state.selectedValue} />;
-    } else {
-      return <HomeBlockDashboard />;
-    }
-  };
-
-  changeDashboard = () => {
-    if (this.state.display === "robot") {
-      this.setState({ display: "homeBlock" });
-    } else {
-      this.setState({ display: "robot" });
-    }
-  };
-
   render() {
     return (
-      <Container>
-        {/* static navbar - top */}
-        <Nav className="navbar navbar-expand-lg fixed-top is-white is-dark-text">
-          <Container className="navbar-brand h1 mb-0 text-large font-medium">
-            Smart Scaffolding
-          </Container>
-          <Container className="navbar-nav ml-auto">
-            <Container className="user-detail-section">
-              <span className="pr-2">LOGO</span>
-              {/* <span className="img-container">
-                <img src={UserImg} className="rounded-circle" alt="user" />
-              </span> */}
+      <div>
+        <Container className="container-fluid pr-5 pl-5 pt-5 pb-5">
+          {/* row 1 - revenue */}
+          <Container className="row full-height">
+            <Container className="col-lg-3 col-sm-6 is-light-text mb-4">
+              <Container className="card grid-card is-card-dark">
+                <Container className="card-heading">
+                  <Container className="is-dark-text-light letter-spacing text-small">
+                    Connection Status
+                  </Container>
+                  <Container className="card-heading-brand">
+                    <i className="fas fa-wifi text-large logo-adjust" />
+                  </Container>
+                </Container>
+
+                <Container className="card-value pt-4 text-x-large">
+                  {"CONNECTED"}
+                </Container>
+              </Container>
+            </Container>
+
+            <Container className="col-lg-3 col-sm-6 is-light-text mb-4">
+              <Container className="card grid-card is-card-dark">
+                <Container className="card-heading">
+                  <Container className="is-dark-text-light letter-spacing text-small">
+                    Robot Count
+                  </Container>
+                  <Container className="card-heading-brand">
+                    <i className="far fa-compass text-large" />
+                  </Container>
+                </Container>
+
+                <Container className="card-value pt-4 text-x-large">
+                  {3}
+                </Container>
+              </Container>
+            </Container>
+
+            <Container className="col-lg-3 col-sm-6 is-light-text mb-4">
+              <Container className="card grid-card is-card-dark">
+                <Container className="card-heading">
+                  <Container className="is-dark-text-light letter-spacing text-small">
+                    Dimensions
+                  </Container>
+                  <Container className="card-heading-brand">
+                    <i className="fas fa-map-marked-alt" />
+                  </Container>
+                </Container>
+
+                <Container className="card-value pt-4 text-x-large">
+                  {"(4, 4, 4)"}
+                </Container>
+              </Container>
+            </Container>
+
+            <Container className="col-lg-3 col-sm-6 is-light-text mb-4">
+              <Container className="card grid-card is-card-dark">
+                <Container className="card-heading">
+                  <Container className="is-dark-text-light letter-spacing text-small">
+                    Blocks To Place
+                  </Container>
+                  <Container className="card-heading-brand">
+                    <i className="fas fa-map-marked-alt" />
+                  </Container>
+                </Container>
+
+                <Container className="card-value pt-4 text-x-large">
+                  {64}
+                </Container>
+              </Container>
             </Container>
           </Container>
-        </Nav>
 
-        {/* static navbar - bottom */}
-        <Nav className="navbar fixed-top nav-secondary is-dark is-light-text">
-          {/* <Container className="text-medium">Dashboard</Container> */}
-          <button
-            class="btn btn-primary text-medium"
-            onClick={this.changeDashboard}
-          >
-            Switch Dashboard
-          </button>
+          {/* row 5 - orders trend */}
 
-          <Container className="navbar-nav ml-auto">
-            <Dropdown
-              className="pr-2 custom-dropdown"
-              options={this.state.dropdownOptions}
-              onChange={this.updateDashboard}
-              value={"Robot ID:   " + this.state.selectedValue}
-              placeholder="Select an option"
-            />
+          <Container className="row" style={{ minHeight: "400px" }}>
+            <Container className="col-md-12 mb-4">
+              <Container className="card is-card-dark chart-card">
+                <Container className="chart-container large full-height">
+                  Robot Angle Simulation
+                  {/* <div id="robot"></div> */}
+                  <BlockSimulation />
+                </Container>
+              </Container>
+            </Container>
           </Container>
-        </Nav>
 
-        {/* content area start */}
-        {this.showDashboard()}
-      </Container>
+          {/* {Row 6} */}
+          <Container className="row" style={{ minHeight: "400px" }}>
+            {/* <Container className="col-md-6 mb-4"> */}
+            <Container className="is-card-dark chart-card">
+              <Container className=" large full-height scrollable">
+                <Console />
+              </Container>
+              {/* </Container> */}
+            </Container>
+          </Container>
+        </Container>
+
+        {/* content area end */}
+      </div>
     );
   }
 }
-
-export default App;
