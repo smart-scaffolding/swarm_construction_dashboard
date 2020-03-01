@@ -27,7 +27,7 @@ ReactFC.fcRoot(FusionCharts, Charts, Maps, USARegion, Widgets);
 
 Charts(FusionCharts);
 
-const url = `https://sheets.googleapis.com/v4/spreadsheets/${config.spreadsheetId}/values:batchGet?ranges=Sheet1&majorDimension=ROWS&key=${config.apiKey}`;
+// const url = `https://sheets.googleapis.com/v4/spreadsheets/${config.spreadsheetId}/values:batchGet?ranges=Sheet1&majorDimension=ROWS&key=${config.apiKey}`;
 
 Pusher.logToConsole = true;
 
@@ -243,38 +243,38 @@ export default class RobotDashboard extends Component {
       //   this.setState({ dropdownOptions: new_dropdown_options });
       // }
     });
-    fetch(url)
-      .then(response => response.json())
-      .then(data => {
-        let batchRowValues = data.valueRanges[0].values;
+    // fetch(url)
+    //   .then(response => response.json())
+    //   .then(data => {
+    //     let batchRowValues = data.valueRanges[0].values;
 
-        const rows = [];
-        for (let i = 1; i < batchRowValues.length; i++) {
-          let rowObject = {};
-          for (let j = 0; j < batchRowValues[i].length; j++) {
-            rowObject[batchRowValues[0][j]] = batchRowValues[i][j];
-          }
-          rows.push(rowObject);
-        }
+    //     const rows = [];
+    //     for (let i = 1; i < batchRowValues.length; i++) {
+    //       let rowObject = {};
+    //       for (let j = 0; j < batchRowValues[i].length; j++) {
+    //         rowObject[batchRowValues[0][j]] = batchRowValues[i][j];
+    //       }
+    //       rows.push(rowObject);
+    //     }
 
-        // dropdown options
-        // let dropdownOptions = [];
+    //     // dropdown options
+    //     // let dropdownOptions = [];
 
-        // for (let i = 0; i < rows.length; i++) {
-        //   dropdownOptions.push(i);
-        // }
+    //     // for (let i = 0; i < rows.length; i++) {
+    //     //   dropdownOptions.push(i);
+    //     // }
 
-        // dropdownOptions = Array.from(new Set(dropdownOptions));
+    //     // dropdownOptions = Array.from(new Set(dropdownOptions));
 
-        this.setState(
-          {
-            items: rows
-            // dropdownOptions: dropdownOptions,
-            // selectedValue: "0"
-          },
-          () => this.getData("Jan 2019")
-        );
-      });
+    //     this.setState(
+    //       {
+    //         items: rows
+    //         // dropdownOptions: dropdownOptions,
+    //         // selectedValue: "0"
+    //       },
+    //       () => this.getData("Jan 2019")
+    //     );
+    //   });
   }
 
   render() {

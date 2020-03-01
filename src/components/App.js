@@ -27,7 +27,7 @@ ReactFC.fcRoot(FusionCharts, Charts, Maps, USARegion, Widgets);
 
 Charts(FusionCharts);
 
-const url = `https://sheets.googleapis.com/v4/spreadsheets/${config.spreadsheetId}/values:batchGet?ranges=Sheet1&majorDimension=ROWS&key=${config.apiKey}`;
+// const url = `https://sheets.googleapis.com/v4/spreadsheets/${config.spreadsheetId}/values:batchGet?ranges=Sheet1&majorDimension=ROWS&key=${config.apiKey}`;
 
 Pusher.logToConsole = true;
 
@@ -58,117 +58,117 @@ class App extends Component {
     };
   }
 
-  getData = arg => {
-    // google sheets data
-    const arr = this.state.items;
-    const arrLen = arr.length;
+  // getData = arg => {
+  //   // google sheets data
+  //   const arr = this.state.items;
+  //   const arrLen = arr.length;
 
-    // kpi's
-    // amazon revenue
-    let amRevenue = 0;
-    //ebay revenue
-    let ebRevenue = 0;
-    // etsy revenue
-    let etRevenue = 0;
-    // total revenue
-    let totalRevenue = 0;
-    // product views
-    let productViews = 0;
-    // purchase rate
-    let purchaseRate = 0;
-    // checkout rate
-    let checkoutRate = 0;
-    // abandoned rate
-    let abandonedRate = 0;
-    // order trend by brand
-    let ordersTrendStore = [];
-    // order trend by region
-    let ordersTrendRegion = [];
-    let orderesTrendnw = 0;
-    let orderesTrendsw = 0;
-    let orderesTrendc = 0;
-    let orderesTrendne = 0;
-    let orderesTrendse = 0;
+  //   // kpi's
+  //   // amazon revenue
+  //   let amRevenue = 0;
+  //   //ebay revenue
+  //   let ebRevenue = 0;
+  //   // etsy revenue
+  //   let etRevenue = 0;
+  //   // total revenue
+  //   let totalRevenue = 0;
+  //   // product views
+  //   let productViews = 0;
+  //   // purchase rate
+  //   let purchaseRate = 0;
+  //   // checkout rate
+  //   let checkoutRate = 0;
+  //   // abandoned rate
+  //   let abandonedRate = 0;
+  //   // order trend by brand
+  //   let ordersTrendStore = [];
+  //   // order trend by region
+  //   let ordersTrendRegion = [];
+  //   let orderesTrendnw = 0;
+  //   let orderesTrendsw = 0;
+  //   let orderesTrendc = 0;
+  //   let orderesTrendne = 0;
+  //   let orderesTrendse = 0;
 
-    // let selectedValue = null;
+  //   // let selectedValue = null;
 
-    for (let i = 0; i < arrLen; i++) {
-      if (arg === arr[i]["month"]) {
-        if (arr[i]["source"] === "AM") {
-          amRevenue += parseInt(arr[i].revenue);
-          ordersTrendStore.push({
-            label: "Motor 1",
-            value: arr[i].orders,
-            displayValue: `${arr[i].orders}`
-          });
-        } else if (arr[i]["source"] === "EB") {
-          ebRevenue += parseInt(arr[i].revenue);
-          ordersTrendStore.push({
-            label: "Motor 2",
-            value: arr[i].orders,
-            displayValue: `${arr[i].orders}`
-          });
-        } else if (arr[i]["source"] === "ET") {
-          etRevenue += parseInt(arr[i].revenue);
-          ordersTrendStore.push({
-            label: "Motor 3",
-            value: arr[i].orders,
-            displayValue: `${arr[i].orders}`
-          });
-        }
-        productViews += parseInt(arr[i].product_views);
-        purchaseRate += parseInt(arr[i].purchase_rate / 3);
-        checkoutRate += parseInt(arr[i].checkout_rate / 3);
-        abandonedRate += parseInt(arr[i].abandoned_rate / 3);
-        orderesTrendnw += parseInt(arr[i].orders_nw);
-        orderesTrendsw += parseInt(arr[i].orders_sw);
-        orderesTrendc += parseInt(arr[i].orders_c);
-        orderesTrendne += parseInt(arr[i].orders_ne);
-        orderesTrendse += parseInt(arr[i].orders_se);
-      }
-    }
+  //   for (let i = 0; i < arrLen; i++) {
+  //     if (arg === arr[i]["month"]) {
+  //       if (arr[i]["source"] === "AM") {
+  //         amRevenue += parseInt(arr[i].revenue);
+  //         ordersTrendStore.push({
+  //           label: "Motor 1",
+  //           value: arr[i].orders,
+  //           displayValue: `${arr[i].orders}`
+  //         });
+  //       } else if (arr[i]["source"] === "EB") {
+  //         ebRevenue += parseInt(arr[i].revenue);
+  //         ordersTrendStore.push({
+  //           label: "Motor 2",
+  //           value: arr[i].orders,
+  //           displayValue: `${arr[i].orders}`
+  //         });
+  //       } else if (arr[i]["source"] === "ET") {
+  //         etRevenue += parseInt(arr[i].revenue);
+  //         ordersTrendStore.push({
+  //           label: "Motor 3",
+  //           value: arr[i].orders,
+  //           displayValue: `${arr[i].orders}`
+  //         });
+  //       }
+  //       productViews += parseInt(arr[i].product_views);
+  //       purchaseRate += parseInt(arr[i].purchase_rate / 3);
+  //       checkoutRate += parseInt(arr[i].checkout_rate / 3);
+  //       abandonedRate += parseInt(arr[i].abandoned_rate / 3);
+  //       orderesTrendnw += parseInt(arr[i].orders_nw);
+  //       orderesTrendsw += parseInt(arr[i].orders_sw);
+  //       orderesTrendc += parseInt(arr[i].orders_c);
+  //       orderesTrendne += parseInt(arr[i].orders_ne);
+  //       orderesTrendse += parseInt(arr[i].orders_se);
+  //     }
+  //   }
 
-    totalRevenue = amRevenue + ebRevenue + etRevenue;
-    ordersTrendRegion.push(
-      {
-        id: "01",
-        value: orderesTrendne
-      },
-      {
-        id: "02",
-        value: orderesTrendnw
-      },
-      {
-        id: "03",
-        value: orderesTrendse
-      },
-      {
-        id: "04",
-        value: orderesTrendsw
-      },
-      {
-        id: "05",
-        value: orderesTrendc
-      }
-    );
+  //   totalRevenue = amRevenue + ebRevenue + etRevenue;
+  //   ordersTrendRegion.push(
+  //     {
+  //       id: "01",
+  //       value: orderesTrendne
+  //     },
+  //     {
+  //       id: "02",
+  //       value: orderesTrendnw
+  //     },
+  //     {
+  //       id: "03",
+  //       value: orderesTrendse
+  //     },
+  //     {
+  //       id: "04",
+  //       value: orderesTrendsw
+  //     },
+  //     {
+  //       id: "05",
+  //       value: orderesTrendc
+  //     }
+  //   );
 
-    // selectedValue = "0";
+  //   // selectedValue = "0";
 
-    // setting state
-    this.setState({
-      amRevenue: formatNum(amRevenue),
-      ebRevenue: formatNum(ebRevenue),
-      etRevenue: formatNum(etRevenue),
-      totalRevenue: formatNum(totalRevenue),
-      productViews: formatNum(productViews),
-      purchaseRate: purchaseRate,
-      checkoutRate: checkoutRate,
-      abandonedRate: abandonedRate,
-      ordersTrendStore: ordersTrendStore,
-      ordersTrendRegion: ordersTrendRegion
-      // selectedValue: selectedValue
-    });
-  };
+  //   // setting state
+  //   this.setState({
+  //     amRevenue: formatNum(amRevenue),
+  //     ebRevenue: formatNum(ebRevenue),
+  //     etRevenue: formatNum(etRevenue),
+  //     totalRevenue: formatNum(totalRevenue),
+  //     productViews: formatNum(productViews),
+  //     purchaseRate: purchaseRate,
+  //     checkoutRate: checkoutRate,
+  //     abandonedRate: abandonedRate,
+  //     ordersTrendStore: ordersTrendStore,
+  //     ordersTrendRegion: ordersTrendRegion
+  //     // selectedValue: selectedValue
+  //   });
+  // };
 
   updateDashboard = event => {
     this.getData(event.value);
@@ -195,38 +195,38 @@ class App extends Component {
         this.setState({ dropdownOptions: [...new Set(new_dropdown_options)] });
       }
     });
-    fetch(url)
-      .then(response => response.json())
-      .then(data => {
-        let batchRowValues = data.valueRanges[0].values;
+    // fetch(url)
+    //   .then(response => response.json())
+    //   .then(data => {
+    //     let batchRowValues = data.valueRanges[0].values;
 
-        const rows = [];
-        for (let i = 1; i < batchRowValues.length; i++) {
-          let rowObject = {};
-          for (let j = 0; j < batchRowValues[i].length; j++) {
-            rowObject[batchRowValues[0][j]] = batchRowValues[i][j];
-          }
-          rows.push(rowObject);
-        }
+    //     const rows = [];
+    //     for (let i = 1; i < batchRowValues.length; i++) {
+    //       let rowObject = {};
+    //       for (let j = 0; j < batchRowValues[i].length; j++) {
+    //         rowObject[batchRowValues[0][j]] = batchRowValues[i][j];
+    //       }
+    //       rows.push(rowObject);
+    //     }
 
-        // dropdown options
-        // let dropdownOptions = [];
+    //     // dropdown options
+    //     // let dropdownOptions = [];
 
-        // for (let i = 0; i < rows.length; i++) {
-        //   dropdownOptions.push(i);
-        // }
+    //     // for (let i = 0; i < rows.length; i++) {
+    //     //   dropdownOptions.push(i);
+    //     // }
 
-        // dropdownOptions = Array.from(new Set(dropdownOptions));
+    //     // dropdownOptions = Array.from(new Set(dropdownOptions));
 
-        this.setState(
-          {
-            items: rows
-            // dropdownOptions: dropdownOptions,
-            // selectedValue: "0"
-          },
-          () => this.getData("Jan 2019")
-        );
-      });
+    //     this.setState(
+    //       {
+    //         items: rows
+    //         // dropdownOptions: dropdownOptions,
+    //         // selectedValue: "0"
+    //       },
+    //       () => this.getData("Jan 2019")
+    //     );
+    //   });
   }
 
   showDashboard = () => {

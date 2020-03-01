@@ -25,7 +25,7 @@ ReactFC.fcRoot(FusionCharts, Charts, Maps, USARegion, Widgets);
 
 Charts(FusionCharts);
 
-const url = `https://sheets.googleapis.com/v4/spreadsheets/${config.spreadsheetId}/values:batchGet?ranges=Sheet1&majorDimension=ROWS&key=${config.apiKey}`;
+// const url = `https://sheets.googleapis.com/v4/spreadsheets/${config.spreadsheetId}/values:batchGet?ranges=Sheet1&majorDimension=ROWS&key=${config.apiKey}`;
 
 export default class HomeBlockDashboard extends Component {
   constructor() {
@@ -164,38 +164,33 @@ export default class HomeBlockDashboard extends Component {
   };
 
   componentDidMount() {
-    fetch(url)
-      .then(response => response.json())
-      .then(data => {
-        let batchRowValues = data.valueRanges[0].values;
-
-        const rows = [];
-        for (let i = 1; i < batchRowValues.length; i++) {
-          let rowObject = {};
-          for (let j = 0; j < batchRowValues[i].length; j++) {
-            rowObject[batchRowValues[0][j]] = batchRowValues[i][j];
-          }
-          rows.push(rowObject);
-        }
-
-        // dropdown options
-        let dropdownOptions = [];
-
-        for (let i = 0; i < rows.length; i++) {
-          dropdownOptions.push(i);
-        }
-
-        dropdownOptions = Array.from(new Set(dropdownOptions));
-
-        this.setState(
-          {
-            items: rows,
-            dropdownOptions: dropdownOptions,
-            selectedValue: "0"
-          },
-          () => this.getData("Jan 2019")
-        );
-      });
+    // fetch(url)
+    //   .then(response => response.json())
+    //   .then(data => {
+    //     let batchRowValues = data.valueRanges[0].values;
+    //     const rows = [];
+    //     for (let i = 1; i < batchRowValues.length; i++) {
+    //       let rowObject = {};
+    //       for (let j = 0; j < batchRowValues[i].length; j++) {
+    //         rowObject[batchRowValues[0][j]] = batchRowValues[i][j];
+    //       }
+    //       rows.push(rowObject);
+    //     }
+    //     // dropdown options
+    //     let dropdownOptions = [];
+    //     for (let i = 0; i < rows.length; i++) {
+    //       dropdownOptions.push(i);
+    //     }
+    //     dropdownOptions = Array.from(new Set(dropdownOptions));
+    //     this.setState(
+    //       {
+    //         items: rows,
+    //         dropdownOptions: dropdownOptions,
+    //         selectedValue: "0"
+    //       },
+    //       () => this.getData("Jan 2019")
+    //     );
+    //   });
   }
 
   render() {
