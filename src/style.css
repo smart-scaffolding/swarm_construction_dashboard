@@ -135,7 +135,7 @@ body {
   -webkit-box-direction: normal;
   -ms-flex-direction: column;
   flex-direction: column;
-  padding: 1.5rem 1.5rem .75rem 1.5rem;
+  padding: 1.5rem 1.5rem 0.75rem 1.5rem;
   height: calc(100%);
 }
 
@@ -175,12 +175,10 @@ body {
   min-width: 75px !important;
 }
 
-
 .chart-container>* {
   height: 100% !important;
   /* CHANGE ME TO ADJUST MAX HEIGHT OF CONTAINERS */
   /* max-height: 350px; */
-
 }
 
 .full-height.border-left,
@@ -193,7 +191,7 @@ body {
   border-radius: 4px;
   background: transparent;
   border: 1px solid rgba(193, 204, 222, 0.2);
-  font-family: 'basefont-regular'
+  font-family: "basefont-regular";
 }
 
 .Dropdown-menu {
@@ -219,13 +217,40 @@ body {
     padding-left: 0 !important;
     padding-right: 0 !important;
   }
-}
 
+  .scrollable {
+    overflow: scroll;
+  }
+
+  .scrollable-x {
+    overflow-x: scroll;
+  }
+
+  .behavior_extra {
+    margin-top: 2%;
+  }
+
+  .blueprint_card {}
+}
 
 @media screen and (min-width: 991px) {
   .full-height {
     height: 100% !important;
   }
+
+  .scrollable {
+    overflow: scroll;
+  }
+
+  .scrollable-x {
+    overflow-x: scroll;
+  }
+
+  .behavior_extra {
+    margin-top: 2%;
+  }
+
+  .blueprint_card {}
 }
 
 @media screen and (max-width: 567px) {
@@ -247,4 +272,54 @@ body {
   .scrollable {
     overflow: scroll;
   }
+
+  .scrollable-x {
+    overflow-x: scroll;
+  }
+
+  .behavior_extra {
+    margin-top: 10%;
+  }
+
+  .blueprint_card {}
+}
+
+.behavior {
+  /* color: white; */
+  /* background-color: white; */
+  padding: 5px;
+  border-radius: 8px;
+  display: inline-block;
+  /* border: 1px solid red; */
+  background: #b5d5ef;
+  color: #002a50;
+  -webkit-transition: all 0.15s;
+  transition: all 0.15s;
+  -webkit-transform: translateY(-5px);
+  transform: translateY(-5px);
+  box-shadow: inset 0 0 0 3px #76b1e1, 0 3px 6px rgba(0, 0, 0, 0.16),
+    0 3px 6px rgba(0, 0, 0, 0.23);
+  box-shadow: 0 0 0 5px #4c99d8;
+  border-color: #94a0b4;
+}
+
+.behavior_container {
+  max-height: 300px;
+  margin-bottom: 20px;
+}
+
+.selected_behavior {
+  box-shadow: 0 0 0 5px #2d7b19;
+  background: #55e85a;
+}
+
+/* figure {
+  margin: 15%;
+} */
+
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
 }

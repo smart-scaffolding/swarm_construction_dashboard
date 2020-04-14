@@ -1,20 +1,3 @@
-/* .main-body {
-    display: flex;
-    flex-direction: column;
-    background-color: #11171d;
-    min-height: 80rem;
-} */
-
-/* .body {
-    display: flex;
-    flex-direction: column;
-}
-
-.inner-body {
-    display: flex;
-    flex-direction: row;
-} */
-
 .tweet-body {
     display: flex;
     flex-direction: column;

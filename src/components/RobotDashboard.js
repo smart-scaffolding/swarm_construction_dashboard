@@ -1,33 +1,24 @@
-import React, { Component } from "react";
-
-import { Container, Nav } from "./styled-components";
-
 // fusioncharts
 import FusionCharts from "fusioncharts";
-import Charts from "fusioncharts/fusioncharts.charts";
-import Maps from "fusioncharts/fusioncharts.maps";
-import USARegion from "fusionmaps/maps/es/fusioncharts.usaregion";
-import ReactFC from "react-fusioncharts";
+import {
+  default as Charts,
+  default as Column2D
+} from "fusioncharts/fusioncharts.charts";
 import Widgets from "fusioncharts/fusioncharts.widgets";
-
-import Zoomline from "fusioncharts/fusioncharts.zoomline";
-import "./charts-theme";
-
-import config from "./config";
-import Dropdown from "react-dropdown";
-import formatNum from "./format-number";
-import Robot from "./Robot";
-import Gauge from "./Gauge";
-import UserImg from "../assets/images/user-img-placeholder.jpeg";
-import Console from "./Console";
-import Paraview from "./Paraview";
 import Pusher from "pusher-js";
+import React, { Component } from "react";
+import { Radar } from "react-chartjs-2";
+import ReactFC from "react-fusioncharts";
+import { Tree, TreeNode } from "react-organizational-chart";
+import "./charts-theme";
+import Console from "./Console";
+import Gauge from "./Gauge";
+import Paraview from "./Paraview";
+import { Container } from "./styled-components";
 
-ReactFC.fcRoot(FusionCharts, Charts, Maps, USARegion, Widgets);
+ReactFC.fcRoot(FusionCharts, Charts, Widgets, Column2D);
 
 Charts(FusionCharts);
-
-// const url = `https://sheets.googleapis.com/v4/spreadsheets/${config.spreadsheetId}/values:batchGet?ranges=Sheet1&majorDimension=ROWS&key=${config.apiKey}`;
 
 Pusher.logToConsole = true;
 
@@ -45,27 +36,95 @@ export default class RobotDashboard extends Component {
       items: [],
       dropdownOptions: [],
       selectedValue: null,
-      amRevenue: null,
-      ebRevenue: null,
-      etRevenue: null,
-      totalRevenue: null,
-      productViews: null,
-      purchaseRate: " ",
-      checkoutRate: " ",
-      abandonedRate: " ",
-      ordersTrendStore: [],
       position: [0, 0, 0],
       angles: [20, 20, 20],
       id: "ROBOT",
       connection_status: "OFFLINE",
-      gripper_status: [],
+      gripper_status: [0, 100],
       battery_life: 30,
       blocks_placed: 0,
       a_link_blocks: 0,
       d_link_blocks: 0,
-      robot_state: "WAITING"
+      robot_state: "WAITING",
+      end_effector_velocity: [
+        { label: 0, value: 0 },
+        { label: 1, value: 2 },
+        { label: 2, value: 4 },
+        { label: 3, value: 5 },
+        { label: 4, value: 4 },
+        { label: 5, value: 4 },
+        { label: 6, value: 2 },
+        { label: 7, value: 0 }
+      ],
+      last_behavior_id: "behavior_root",
+      behavior_times: [28, 48, 40, 300, 96]
     };
+  }
 
+  check_alive_status = () => {
+    this.setState({ connection_status: "OFFLINE" });
+  };
+
+  selectBehavior = input => {
+    let select_behavior = "";
+    switch (input) {
+      case "wait":
+        select_behavior = "behavior_wait";
+        break;
+      case "update":
+        select_behavior = "behavior_update";
+        break;
+
+      case "build":
+        select_behavior = "behavior_build";
+        break;
+
+      case "build_MoveToBlockToRemove":
+        select_behavior = "behavior_build_nav_one";
+        break;
+
+      case "build_RemoveBlock":
+        select_behavior = "behavior_build_remove";
+        break;
+      case "build_MoveToPlaceBlock":
+        select_behavior = "behavior_build_nav_two";
+        break;
+      case "build_PlaceBlock":
+        select_behavior = "behavior_build_place";
+        break;
+
+      case "ferry":
+        select_behavior = "behavior_ferry";
+        break;
+
+      case "ferry_MoveToBlockToRemove":
+        select_behavior = "behavior_ferry_nav_one";
+        break;
+
+      case "ferry_RemoveBlock":
+        select_behavior = "behavior_ferry_remove";
+        break;
+      case "ferry_MoveToPlaceBlock":
+        select_behavior = "behavior_ferry_nav_two";
+        break;
+      case "ferry_PlaceBlock":
+        select_behavior = "behavior_ferry_place";
+        break;
+
+      case "root":
+      default:
+        select_behavior = "behavior_root";
+        break;
+    }
+    document.getElementById(select_behavior).classList.add("selected_behavior");
+
+    document
+      .getElementById(this.state.last_behavior_id)
+      .classList.remove("selected_behavior");
+
+    this.setState({ last_behavior_id: select_behavior });
+  };
+  componentDidMount() {
     let grippers = [];
     grippers.push({
       label: "A Gripper",
@@ -74,138 +133,49 @@ export default class RobotDashboard extends Component {
     });
     grippers.push({
       label: "D Gripper",
-      value: 0,
+      value: 100,
       displayValue: `${0}`
     });
     this.setState({
       gripper_status: grippers
     });
-  }
-
-  getData = arg => {
-    // google sheets data
-    const arr = this.state.items;
-    const arrLen = arr.length;
-
-    // kpi's
-    // amazon revenue
-    let amRevenue = 0;
-    //ebay revenue
-    let ebRevenue = 0;
-    // etsy revenue
-    let etRevenue = 0;
-    // total revenue
-    let totalRevenue = 0;
-    // product views
-    let productViews = 0;
-    // purchase rate
-    let purchaseRate = 0;
-    // checkout rate
-    let checkoutRate = 0;
-    // abandoned rate
-    let abandonedRate = 0;
-    // order trend by brand
-    let ordersTrendStore = [];
-    // order trend by region
-    let ordersTrendRegion = [];
-    let orderesTrendnw = 0;
-    let orderesTrendsw = 0;
-    let orderesTrendc = 0;
-    let orderesTrendne = 0;
-    let orderesTrendse = 0;
-
-    // let selectedValue = null;
-
-    for (let i = 0; i < arrLen; i++) {
-      if (arg === arr[i]["month"]) {
-        if (arr[i]["source"] === "AM") {
-          amRevenue += parseInt(arr[i].revenue);
-          ordersTrendStore.push({
-            label: "Motor 1",
-            value: arr[i].orders,
-            displayValue: `${arr[i].orders}`
-          });
-        } else if (arr[i]["source"] === "EB") {
-          ebRevenue += parseInt(arr[i].revenue);
-          ordersTrendStore.push({
-            label: "Motor 2",
-            value: arr[i].orders,
-            displayValue: `${arr[i].orders}`
-          });
-        } else if (arr[i]["source"] === "ET") {
-          etRevenue += parseInt(arr[i].revenue);
-          ordersTrendStore.push({
-            label: "Motor 3",
-            value: arr[i].orders,
-            displayValue: `${arr[i].orders}`
-          });
-        }
-        productViews += parseInt(arr[i].product_views);
-        purchaseRate += parseInt(arr[i].purchase_rate / 3);
-        checkoutRate += parseInt(arr[i].checkout_rate / 3);
-        abandonedRate += parseInt(arr[i].abandoned_rate / 3);
-        orderesTrendnw += parseInt(arr[i].orders_nw);
-        orderesTrendsw += parseInt(arr[i].orders_sw);
-        orderesTrendc += parseInt(arr[i].orders_c);
-        orderesTrendne += parseInt(arr[i].orders_ne);
-        orderesTrendse += parseInt(arr[i].orders_se);
-      }
-    }
-
-    totalRevenue = amRevenue + ebRevenue + etRevenue;
-    ordersTrendRegion.push(
-      {
-        id: "01",
-        value: orderesTrendne
-      },
-      {
-        id: "02",
-        value: orderesTrendnw
-      },
-      {
-        id: "03",
-        value: orderesTrendse
-      },
-      {
-        id: "04",
-        value: orderesTrendsw
-      },
-      {
-        id: "05",
-        value: orderesTrendc
-      }
-    );
-
-    // selectedValue = "0";
-
-    // setting state
-    this.setState({
-      amRevenue: formatNum(amRevenue),
-      ebRevenue: formatNum(ebRevenue),
-      etRevenue: formatNum(etRevenue),
-      totalRevenue: formatNum(totalRevenue),
-      productViews: formatNum(productViews),
-      purchaseRate: purchaseRate,
-      checkoutRate: checkoutRate,
-      abandonedRate: abandonedRate,
-      ordersTrendStore: ordersTrendStore,
-      ordersTrendRegion: ordersTrendRegion
-      // selectedValue: selectedValue
-    });
-  };
-
-  updateDashboard = event => {
-    this.getData(event.value);
-    this.setState({ selectedValue: event.value });
-  };
-
-  check_alive_status = () => {
-    this.setState({ connection_status: "OFFLINE" });
-  };
-
-  componentDidMount() {
     this.alive = setInterval(this.check_alive_status, 15000);
 
+    channel.bind("behavior_tree", data => {
+      console.log(data);
+      var behavior = data["behavior"];
+      var parent = data["parent"];
+      console.log(parent);
+      if (this.props.robot_id === data["id"]) {
+        if (parent == null) {
+          this.selectBehavior(behavior);
+          console.log("Parent is not there");
+        } else {
+          this.selectBehavior(parent + "_" + behavior);
+        }
+      }
+    });
+
+    channel.bind("behavior_time", data => {
+      console.log(data);
+      console.log(this.props.robot_id);
+      console.log(data["id"]);
+      if (this.props.robot_id === data["id"]) {
+        this.setState({
+          behavior_times: [
+            data["wait"],
+            data["update"],
+            data["move"],
+            data["ferry"],
+            data["build"]
+          ]
+        });
+      }
+    });
+
+    channel.bind("behavior", data => {
+      this.selectBehavior(data["behavior"]);
+    });
     channel.bind("state", data => {
       // alert(JSON.stringify(data));
       clearInterval(this.alive);
@@ -217,13 +187,20 @@ export default class RobotDashboard extends Component {
         grippers.push({
           label: "A Gripper",
           value: data["grippers"].a,
-          displayValue: `${data["grippers"].a}`
+          displayValue: `A Gripper: ${data["grippers"].a}`
         });
         grippers.push({
           label: "D Gripper",
           value: data["grippers"].d,
           displayValue: `${data["grippers"].d}`
         });
+
+        let velocity = this.state.end_effector_velocity;
+        if (velocity.length > 7) {
+          velocity.splice(0, 1);
+        }
+        velocity.push(data["end_effector_velocity"]);
+        velocity.flat(Infinity);
         this.setState({
           connection_status: "CONNECTED",
           position: data["position"],
@@ -234,55 +211,18 @@ export default class RobotDashboard extends Component {
           blocks_placed: data["blocks_placed"],
           a_link_blocks: data["a_link_blocks"],
           d_link_blocks: data["d_link_blocks"],
-          robot_state: data["robot_state"]
+          robot_state: data["robot_state"],
+          end_effector_velocity: velocity
         });
       }
-      // } else {
-      //   let new_dropdown_options = this.state.dropdownOptions;
-      //   new_dropdown_options.push(data["id"]);
-      //   this.setState({ dropdownOptions: new_dropdown_options });
-      // }
     });
-    // fetch(url)
-    //   .then(response => response.json())
-    //   .then(data => {
-    //     let batchRowValues = data.valueRanges[0].values;
-
-    //     const rows = [];
-    //     for (let i = 1; i < batchRowValues.length; i++) {
-    //       let rowObject = {};
-    //       for (let j = 0; j < batchRowValues[i].length; j++) {
-    //         rowObject[batchRowValues[0][j]] = batchRowValues[i][j];
-    //       }
-    //       rows.push(rowObject);
-    //     }
-
-    //     // dropdown options
-    //     // let dropdownOptions = [];
-
-    //     // for (let i = 0; i < rows.length; i++) {
-    //     //   dropdownOptions.push(i);
-    //     // }
-
-    //     // dropdownOptions = Array.from(new Set(dropdownOptions));
-
-    //     this.setState(
-    //       {
-    //         items: rows
-    //         // dropdownOptions: dropdownOptions,
-    //         // selectedValue: "0"
-    //       },
-    //       () => this.getData("Jan 2019")
-    //     );
-    //   });
   }
 
   render() {
-    console.log("Robot battery: ", this.state.battery_life);
+    console.log("EE Velocity: ", this.state.end_effector_velocity);
     return (
       <div>
         <Container className="container-fluid pr-5 pl-5 pt-5 pb-5">
-          {/* row 1 - revenue */}
           <Container className="row full-height">
             <Container className="col-lg-3 col-sm-6 is-light-text mb-4">
               <Container className="card grid-card is-card-dark">
@@ -312,7 +252,7 @@ export default class RobotDashboard extends Component {
                   </Container>
                 </Container>
 
-                <Container className="card-value pt-4 text-x-large">
+                <Container className="card-value pt-4 text-x-large ">
                   {"HORIZONTAL"}
                 </Container>
               </Container>
@@ -346,7 +286,7 @@ export default class RobotDashboard extends Component {
             </Container>
           </Container>
 
-          {/* row 2 - conversion */}
+          {/* row 2  */}
           <Container className="row">
             <Container className="col-md-4 col-lg-3 is-light-text mb-4">
               <Container className="card grid-card is-card-dark">
@@ -468,7 +408,7 @@ export default class RobotDashboard extends Component {
             </Container>
           </Container>
 
-          {/* row 3 - orders trend */}
+          {/* row 3 */}
           <Container className="row" style={{ minHeight: "400px" }}>
             <Container className="col-md-6 mb-4">
               <Container className="card is-card-dark chart-card">
@@ -485,7 +425,9 @@ export default class RobotDashboard extends Component {
                         chart: {
                           theme: "ecommerce",
                           caption: "% Closed",
-                          subCaption: "Grippers"
+                          subCaption: "Grippers",
+                          yaxisname: "Percent closed",
+                          yAxisMaxValue: "100"
                         },
                         data: this.state.gripper_status
                       }
@@ -496,7 +438,6 @@ export default class RobotDashboard extends Component {
             </Container>
 
             <Container className="col-md-6 mb-4">
-              {/* <Container className="card is-card-dark chart-card"> */}
               <Container className="card grid-card is-light-text mb-4 is-card-dark">
                 <Container className="card-heading mb-3">
                   <Container className="is-dark-text-light letter-spacing text-small">
@@ -505,10 +446,6 @@ export default class RobotDashboard extends Component {
                 </Container>
                 <Container className="card-value pt-1 text-x-large">
                   {this.state.robot_state}
-                  {/* {this.state.productViews} */}
-                  {/* <span className="text-medium pl-2 is-dark-text-light">
-                    blocks
-                  </span> */}
                 </Container>
                 <Container className="card-heading mb-3 pt-5">
                   <Container className="is-dark-text-light letter-spacing text-small">
@@ -533,138 +470,58 @@ export default class RobotDashboard extends Component {
                   </span>
                 </Container>
               </Container>
-              {/* <Container className="chart-container large full-height">
-                  <ReactFC
-                    {...{
-                      type: "usaregion",
-                      width: "100%",
-                      height: "100%",
-                      dataFormat: "json",
-                      containerBackgroundOpacity: "0",
-                      dataEmptyMessage: "Loading Data...",
-                      dataSource: {
-                        chart: {
-                          theme: "ecommerce",
-                          caption: "Orders Trend",
-                          subCaption: "By Region"
-                        },
-                        colorrange: {
-                          code: "#F64F4B",
-                          minvalue: "0",
-                          gradient: "1",
-                          color: [
-                            {
-                              minValue: "10",
-                              maxvalue: "25",
-                              code: "#EDF8B1"
-                            },
-                            {
-                              minvalue: "25",
-                              maxvalue: "50",
-                              code: "#18D380"
-                            }
-                          ]
-                        },
-                        data: this.state.ordersTrendRegion
-                      }
-                    }}
-                  />
-                </Container> */}
-              {/* </Container> */}
             </Container>
           </Container>
 
-          {/* row 4 - orders trend */}
-
-          {/* <Container className="row" style={{ minHeight: "400px" }}>
-            <Container className="col-md-6 mb-4">
-              <Container className="card is-card-dark chart-card">
-                <Container className="chart-container large full-height scrollable">
-                  <Console />
-                </Container>
-              </Container>
-            </Container>
-
-            <Container className="col-md-6 mb-4">
-              <Container className="card is-card-dark chart-card">
-                <Container className="chart-container large full-height">
-                  <ReactFC
-                    {...{
-                      type: "line",
-                      width: "100%",
-                      height: "100%",
-                      dataFormat: "json",
-                      containerBackgroundOpacity: "0",
-                      dataSource: {
-                        chart: {
-                          theme: "ecommerce",
-                          caption: "End Effector Position",
-                          xAxisName: "Timestamp",
-                          yAxisName: "Position (m)",
-                          lineThickness: "2",
-                          paletteColors: "#3B70C4, #000000"
-                        },
-                        data: [
-                          {
-                            label: "9:46:01",
-                            value: "15"
-                          },
-                          {
-                            label: "09:47:31",
-                            value: "14"
-                          },
-                          {
-                            label: "09:47:52",
-                            value: "23"
-                          },
-                          {
-                            label: "09:48:01",
-                            value: "91"
-                          },
-                          {
-                            label: "09:48:43",
-                            value: "15"
-                          },
-                          {
-                            label: "09:49:10",
-                            value: "20"
-                          },
-                          {
-                            label: "09:49:33",
-                            value: "19"
-                          }
-                        ]
-                        // trendlines: [
-                        //   {
-                        //     line: [
-                        //       {
-                        //         startvalue: "18500",
-                        //         color: "#29C3BE",
-                        //         displayvalue:
-                        //           "Average{br}weekly{br}footfall",
-                        //         valueOnRight: "1",
-                        //         thickness: "2"
-                        //       }
-                        //     ]
-                        //   }
-                        // ]
-                      }
-                    }}
-                  />
-                </Container>
-              </Container>
-            </Container>
-          </Container> */}
-
-          {/* row 5 - orders trend */}
+          {/* row 5 */}
 
           <Container className="row" style={{ minHeight: "400px" }}>
             <Container className="col-md-6 mb-4">
               <Container className="card is-card-dark chart-card">
-                <Container className="chart-container large full-height">
-                  Robot Angle Simulation
-                  {/* <div id="robot"></div> */}
-                  <Robot />
+                <Container className="chart-container large full-height is-dark-text-light">
+                  Robot Behavior Time
+                  <Radar
+                    height={1}
+                    width={1}
+                    data={{
+                      labels: ["Wait", "Update", "Move", "Ferry", "Build"],
+                      datasets: [
+                        {
+                          label: "Behavior Time (seconds)",
+                          pointLabelFontColor: "white",
+                          backgroundColor: "rgba(59, 112, 196, 0.2)",
+                          borderColor: "#3B70C4",
+                          pointBackgroundColor: "#fff",
+                          pointBorderColor: "#fff",
+                          pointHoverBackgroundColor: "#fff",
+                          pointHoverBorderColor: "rgba(59, 112, 196, 0.2)",
+                          data: this.state.behavior_times
+                        }
+                      ]
+                    }}
+                    options={{
+                      responsive: true,
+                      maintainAspectRatio: true,
+                      scale: {
+                        gridLines: {
+                          color: [
+                            "rgb(128, 145, 171, 0.2)",
+                            "rgb(128, 145, 171, 0.2)",
+                            "rgb(128, 145, 171, 0.2)",
+                            "rgb(128, 145, 171, 0.2)",
+                            "rgb(128, 145, 171, 0.2)",
+                            "rgb(128, 145, 171, 0.2)",
+                            "rgb(128, 145, 171, 0.2)",
+                            "rgb(128, 145, 171, 0.2)",
+                            "rgb(128, 145, 171, 0.2)"
+                          ]
+                        },
+                        pointLabels: {
+                          fontColor: "white"
+                        }
+                      }
+                    }}
+                  />
                 </Container>
               </Container>
             </Container>
@@ -682,72 +539,134 @@ export default class RobotDashboard extends Component {
                       dataSource: {
                         chart: {
                           theme: "ecommerce",
-                          caption: "End Effector Position",
+                          caption: "End Effector Velocity (norm)",
                           xAxisName: "Timestamp",
-                          yAxisName: "Position (m)",
+                          yAxisName: "Velocity (m/s)",
                           lineThickness: "2",
                           paletteColors: "#3B70C4, #000000"
                         },
-                        data: [
-                          {
-                            label: "9:46:01",
-                            value: "15"
-                          },
-                          {
-                            label: "09:47:31",
-                            value: "14"
-                          },
-                          {
-                            label: "09:47:52",
-                            value: "23"
-                          },
-                          {
-                            label: "09:48:01",
-                            value: "91"
-                          },
-                          {
-                            label: "09:48:43",
-                            value: "15"
-                          },
-                          {
-                            label: "09:49:10",
-                            value: "20"
-                          },
-                          {
-                            label: "09:49:33",
-                            value: "19"
-                          }
-                        ]
-                        // trendlines: [
-                        //   {
-                        //     line: [
-                        //       {
-                        //         startvalue: "18500",
-                        //         color: "#29C3BE",
-                        //         displayvalue:
-                        //           "Average{br}weekly{br}footfall",
-                        //         valueOnRight: "1",
-                        //         thickness: "2"
-                        //       }
-                        //     ]
-                        //   }
-                        // ]
+                        data: this.state.end_effector_velocity
                       }
                     }}
                   />
                 </Container>
+              </Container>
+            </Container>
+          </Container>
+
+          <Container className="row" style={{ minHeight: "400px" }}>
+            <Container className="is-card-dark chart-card scrollable-x">
+              <Container className=" large full-height scrollable-x behavior_container">
+                <Tree
+                  lineWidth={"2px"}
+                  lineColor={"white"}
+                  lineBorderRadius={"10px"}
+                  label={
+                    <div
+                      id="behavior_root"
+                      className="behavior behavior_extra selected_behavior"
+                    >
+                      Root
+                    </div>
+                  }
+                >
+                  <TreeNode
+                    label={
+                      <div id="behavior_update" className="behavior">
+                        Update
+                      </div>
+                    }
+                  />
+                  <TreeNode
+                    label={
+                      <div id="behavior_build" className="behavior">
+                        Build
+                      </div>
+                    }
+                  >
+                    <TreeNode
+                      label={
+                        <div id="behavior_build_nav_one" className="behavior">
+                          Navigate To Point
+                        </div>
+                      }
+                    />
+                    <TreeNode
+                      label={
+                        <div id="behavior_build_remove" className="behavior">
+                          Remove Block
+                        </div>
+                      }
+                    />
+                    <TreeNode
+                      label={
+                        <div id="behavior_build_nav_two" className="behavior">
+                          Navigate To Point
+                        </div>
+                      }
+                    />
+                    <TreeNode
+                      label={
+                        <div id="behavior_build_place" className="behavior">
+                          Place Block
+                        </div>
+                      }
+                    />
+                  </TreeNode>
+                  <TreeNode
+                    label={
+                      <div id="behavior_ferry" className="behavior">
+                        Ferry
+                      </div>
+                    }
+                  >
+                    <TreeNode
+                      label={
+                        <div id="behavior_ferry_nav_one" className="behavior">
+                          Navigate To Point
+                        </div>
+                      }
+                    />
+                    <TreeNode
+                      label={
+                        <div id="behavior_ferry_remove" className="behavior">
+                          Remove Block
+                        </div>
+                      }
+                    />
+                    <TreeNode
+                      label={
+                        <div id="behavior_ferry_nav_two" className="behavior">
+                          Navigate To Point
+                        </div>
+                      }
+                    />
+                    <TreeNode
+                      label={
+                        <div id="behavior_ferry_place" className="behavior">
+                          Place Block
+                        </div>
+                      }
+                    />
+                  </TreeNode>
+                  <TreeNode
+                    label={
+                      <div id="behavior_wait" className="behavior">
+                        Wait
+                      </div>
+                    }
+                  />
+                </Tree>
               </Container>
             </Container>
           </Container>
 
           {/* {Row 6} */}
           <Container className="row" style={{ minHeight: "400px" }}>
-            {/* <Container className="col-md-6 mb-4"> */}
             <Container className="is-card-dark chart-card">
               <Container className=" large full-height scrollable">
                 <Console />
               </Container>
-              {/* </Container> */}
             </Container>
           </Container>
         </Container>

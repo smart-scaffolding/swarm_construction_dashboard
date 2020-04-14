@@ -47,13 +47,12 @@ window.FusionCharts.register("theme", {
         captionFontColor: "#8091ab",
         paletteColors: "#1D91C0",
         valuePadding: "5",
-        yAxisName: "Orders",
         yAxisNameAlpha: "50",
         yAxisNameFontSize: "12",
         yAxisNamePadding: "20",
         valueFontBold: "0",
         valueFontSize: "12",
-        plotToolText: "<div>$label<br><b>$value orders</b>",
+        plotToolText: "<div>$label<br><b>$value%</b>",
         captionAlignment: "left",
         captionPadding: "20"
       }

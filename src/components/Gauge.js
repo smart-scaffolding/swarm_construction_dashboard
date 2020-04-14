@@ -1,7 +1,7 @@
 import fusioncharts from "fusioncharts";
 import charts from "fusioncharts/fusioncharts.charts";
+import React from "react";
 import ReactFC from "react-fusioncharts";
-import React, { Component } from "react";
 
 // Resolves charts dependancy
 charts(fusioncharts);

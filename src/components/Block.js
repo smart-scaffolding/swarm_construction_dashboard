@@ -1,5 +1,4 @@
 import * as THREE from "three";
-import * as dat from "dat.gui";
 import { OrbitControls } from "./OrbitControls.js";
 
 class VoxelWorld {
@@ -123,28 +122,35 @@ VoxelWorld.faces = [
 
 function main() {
   const canvas = document.getElementById("#c");
-  const renderer = new THREE.WebGLRenderer({ canvas });
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+  // renderer.setPixelRatio(window.devicePixelRatio);
+  // renderer.setSize(window.innerWidth, window.innerHeight);
 
+  // container.appendChild(renderer.domElement);
+
+  renderer.outputEncoding = THREE.sRGBEncoding;
+
+  renderer.shadowMap.enabled = true;
   let blueprint = [
-    [[1, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [1, 1, 1]],
-    [[1, 0, 0], [1, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]],
+    [[1, 1, 1], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]],
     [[1, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]],
     [[1, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]],
-    [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]],
     [[1, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]],
-    [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]],
-    [[1, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]]
+    [[1, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]],
+    [[1, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]],
+    [[1, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]],
+    [[1, 1, 1], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]]
   ];
 
   //   const cellSize = blueprint.size * blueprint[0].size * blueprint[0][0].size;
-  const cellSize = 30;
+  const cellSize = 60;
 
   const fov = 80;
   const aspect = 2; // the canvas default
   const near = 0.1;
   const far = 30;
-  //   const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-  //   camera.position.set(-cellSize * 0.3, cellSize * 0.8, -cellSize * 0.3);
+  // const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+  // camera.positiozn.set(-cellSize * 0.3, cellSize * 0.8, -cellSize * 0.3);
   var camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
   camera.position.z = 20;
   camera.position.x = -5;
@@ -153,28 +159,64 @@ function main() {
   camera.updateProjectionMatrix();
   const controls = new OrbitControls(camera, canvas);
   controls.target.set(cellSize / 2, cellSize / 3, cellSize / 2);
+
+  // var controls = new OrbitControls(camera, renderer.domElement);
+  // controls.maxPolarAngle = Math.PI * 0.5;
+  // controls.minDistance = 1000;
+  // controls.maxDistance = 5000;
   controls.update();
 
-  const scene = new THREE.Scene();
-  //   scene.background = new THREE.Color("lightblue");
+  var scene = new THREE.Scene();
+  scene.background = new THREE.Color(0xcce0ff);
+  scene.fog = new THREE.Fog(0xcce0ff, 500, 10000);
 
-  function addLight(x, y, z) {
-    const color = 0xffffff;
-    const intensity = 1;
-    const light = new THREE.DirectionalLight(color, intensity);
-    light.position.set(x, y, z);
-    scene.add(light);
-  }
-  addLight(-1, 2, 4);
-  addLight(1, -1, -2);
+  scene.add(new THREE.AmbientLight(0x666666));
+
+  var light = new THREE.DirectionalLight(0xdfebff, 1);
+  light.position.set(50, 200, 100);
+  light.position.multiplyScalar(1.3);
+
+  light.castShadow = true;
+
+  light.shadow.mapSize.width = 1024;
+  light.shadow.mapSize.height = 1024;
+
+  var d = 300;
+
+  light.shadow.camera.left = -d;
+  light.shadow.camera.right = d;
+  light.shadow.camera.top = d;
+  light.shadow.camera.bottom = -d;
+
+  light.shadow.camera.far = 1000;
+
+  scene.add(light);
+
+  var loader = new THREE.TextureLoader();
+
+  // load a resource
+  loader.load(
+    // resource URL
+    "http://192.168.1.145:8000/grasslight-big.jpg",
+    // Function when resource is loaded
+    function(texture) {
+      // in this example we create the material when the texture is loaded
+      var material = new THREE.MeshBasicMaterial({
+        map: texture
+      });
+    },
+
+    // onProgress callback currently not supported
+    undefined,
+
+    // onError callback
+    function(err) {
+      console.error("An error happened.");
+      console.error(err);
+    }
+  );
 
   const world = new VoxelWorld(cellSize);
-
-  //   for (let y = 0; y < cellSize; ++y) {
-  //     for (let z = 0; z < cellSize; ++z) {
-  //       for (let x = 0; x < cellSize; ++x) {
-  //         const height = 10;
-  //         if (y < height) {
 
   var i,
     j,
@@ -195,7 +237,9 @@ function main() {
     0
   );
   const geometry = new THREE.BufferGeometry();
-  const material = new THREE.MeshLambertMaterial({ color: "green" });
+  const material = new THREE.MeshLambertMaterial({
+    color: "green"
+  });
 
   const positionNumComponents = 3;
   const normalNumComponents = 3;

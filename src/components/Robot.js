@@ -1,6 +1,6 @@
+import * as dat from "dat.gui";
 import React, { Component } from "react";
 import * as THREE from "three";
-import * as dat from "dat.gui";
 
 export default class Robot extends Component {
   display_robot() {
@@ -132,6 +132,6 @@ export default class Robot extends Component {
     this.display_robot();
   }
   render() {
-    return <div id="robot"></div>;
+    return <div id="robot" />;
   }
 }

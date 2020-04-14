@@ -1,12 +1,12 @@
 import React, { Component } from "react";
-import { TweetBody } from "./tweet";
 import {
-  PullToRefresh,
   PullDownContent,
-  ReleaseContent,
-  RefreshContent
+  PullToRefresh,
+  RefreshContent,
+  ReleaseContent
 } from "react-js-pull-to-refresh";
 import "./Console.css";
+import { TweetBody } from "./tweet";
 
 class Console extends Component {
   constructor(props) {
@@ -42,7 +42,6 @@ class Console extends Component {
           users: [
             {
               name: data.results[0].name,
-              //   image: data.results[0].picture.medium,
               image: "",
 
               tweet: data.results[0].email
